@@ -16,3 +16,15 @@ npm start
 ```
 
 open browser and go to http://localhost:3000
+
+## PM2
+
+```
+npm i ts-node -g
+```
+
+start pm2
+
+```
+pm2 start --interpreter ts-node src/bin/www.ts MyServerName
+```
