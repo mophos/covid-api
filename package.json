@@ -3,9 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "ts-node src/bin/www.ts",
-    "watch": "nodemon -e ts -w ./src -x npm run watch:serve",
-    "watch:serve": "ts-node --inspect src/bin/www.ts"
+    "start": "npx ts-node src/bin/www.ts",
+    "watch": "npx nodemon"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
