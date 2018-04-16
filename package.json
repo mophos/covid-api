@@ -29,6 +29,9 @@
     "@types/knex": "^0.14.9",
     "@types/morgan": "^1.7.32",
     "@types/node": "^9.6.4",
-    "@types/serve-favicon": "^2.2.30"
+    "@types/serve-favicon": "^2.2.30",
+    "nodemon": "^1.17.3",
+    "ts-node": "^5.0.1",
+    "typescript": "^2.8.1"
   }
 }
