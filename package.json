@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "basic-rest-api",
   "version": "0.1.0",
   "private": true,
   "scripts": {

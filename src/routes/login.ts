@@ -2,28 +2,43 @@
 import * as express from 'express';
 import { Router, Request, Response } from 'express';
 import * as HttpStatus from 'http-status-codes';
+import * as crypto from 'crypto';
+
+import { Login } from '../models/login';
 
 import { Jwt } from '../models/jwt';
 
+const loginModel = new Login();
 const jwt = new Jwt();
 
 const router: Router = Router();
 
-router.post('/', (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
   let username: string = req.body.username;
   let password: string = req.body.password;
 
-  if (username === 'admin' && password === 'admin') {
-    let payload = {
-      id: 1,
-      fullname: 'Satit Rianpit'
+  let db = req.db;
+
+  try {
+    let encPassword = crypto.createHash('md5').update(password).digest('hex');
+    let rs: any = await loginModel.doLogin(db, username, encPassword);
+
+    if (rs.length) {
+
+      let payload = {
+        fullname: rs[0].fullname,
+        username: username
+      }
+
+      let token = jwt.sign(payload);
+      res.send({ ok: true, token: token, code: HttpStatus.OK });
+    } else {
+      res.send({ ok: false, error: 'Login failed!', code: HttpStatus.UNAUTHORIZED });
     }
-    let token = jwt.sign(payload);
-    
-    res.send({ ok: true, token: token, code: HttpStatus.OK });
-  } else {
-    res.send({ ok: false, error: 'Login failed!', code: HttpStatus.UNAUTHORIZED });
+  } catch (error) {
+    res.send({ ok: false, error: error.message, code: HttpStatus.INTERNAL_SERVER_ERROR });
   }
+  
 });
 
 export default router;
