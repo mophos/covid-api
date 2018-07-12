@@ -1,7 +1,8 @@
+/// <reference path="../typings.d.ts" />
+
 require('dotenv').config();
 
 import * as path from 'path';
-import * as favicon from 'serve-favicon';
 import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
@@ -17,10 +18,9 @@ import { Jwt } from './models/jwt';
 
 import indexRoute from './routes/index';
 import loginRoute from './routes/login';
-import apiRoute from './routes/api';
+import requestRoute from './routes/request';
 
 // Assign router to the express.Router() instance
-const router: Router = Router();
 const app: express.Application = express();
 
 const jwt = new Jwt();
@@ -64,12 +64,12 @@ let db = Knex({
   },
 });
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   req.db = db;
   next();
 });
 
-let checkAuth = (req, res, next) => {
+let checkAuth = (req: Request, res: Response, next: NextFunction) => {
   let token: string = null;
 
   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
@@ -94,7 +94,7 @@ let checkAuth = (req, res, next) => {
 }
 
 app.use('/login', loginRoute);
-app.use('/api', checkAuth, apiRoute);
+app.use('/api', checkAuth, requestRoute);
 app.use('/', indexRoute);
 
 //error handlers
