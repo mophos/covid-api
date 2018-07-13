@@ -1,3 +1,5 @@
+/// <reference path="../../typings.d.ts" />
+
 import * as HttpStatus from 'http-status-codes';
 import * as moment from 'moment';
 
