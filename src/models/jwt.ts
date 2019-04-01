@@ -10,6 +10,13 @@ export class Jwt {
     return token;
   }
 
+  signApiKey(playload: any) {
+    let token = jwt.sign(playload, this.secretKey, {
+      expiresIn: '1y'
+    });
+    return token;
+  }
+
   verify(token: string) {
     return new Promise((resolve, reject) => {
       jwt.verify(token, this.secretKey, (err, decoded) => {
