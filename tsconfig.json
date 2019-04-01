@@ -5,9 +5,10 @@
     "strict": false,
     "removeComments": true,
     "sourceMap": true,
-    "rootDir": "src"
+    "rootDir": "src",
+    "outDir": "dist"
   },
-  "exclude":[
+  "exclude": [
     "node_modules"
   ]
 }
