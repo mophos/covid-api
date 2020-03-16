@@ -21,6 +21,7 @@
     "morgan": "^1.9.1",
     "mqtt": "^2.18.8",
     "mysql": "^2.16.0",
+    "request": "^2.88.2",
     "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
