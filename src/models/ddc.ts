@@ -20,5 +20,41 @@ export class DdcModel {
     });
   }
 
+  summaryGlobal() {
+    return new Promise((resolve, reject) => {
+      var options = {
+        'method': 'GET',
+        'url': 'https://ddcportal.ddc.moph.go.th/arcgis/rest/services/iT_Neillgis/map_global_jh_point/FeatureServer/0/query?f=json&where=COUNTRY_JO%3C%3E%27Thailand%27%20AND%20TotalCases%20IS%20NOT%20NULL&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=TotalCases%20desc&outSR=102100&resultOffset=0&resultRecordCount=200',
+        'headers': {
+        }
+      };
+      request(options, function (error, response) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(JSON.parse(response.body));
+        }
+      });
+    });
+  }
+
+  getPr() {
+    return new Promise((resolve, reject) => {
+      var options = {
+        'method': 'GET',
+        'url': 'https://pr.moph.go.th/rss_prmoph.php?id=1',
+        'headers': {
+        }
+      };
+      request(options, function (error, response) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(response.body);
+        }
+      });
+    });
+  }
+
 
 }
