@@ -80,8 +80,8 @@ router.get('/summary/global', async (req: Request, res: Response) => {
 
         const obj = {
           country: d.COUNTRY,
-          country_jo: d.COUNTRY_JO,
-          province_s: d.Province_S,
+          countryJo: d.COUNTRY_JO,
+          provinceS: d.Province_S,
           longtitude: d.Longtitude,
           latitude: d.Latitude,
           critical: d.Critical,
