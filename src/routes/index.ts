@@ -13,6 +13,25 @@ router.get('/', (req: Request, res: Response) => {
   res.send({ ok: true, message: 'Welcome to RESTful api server!', code: HttpStatus.OK });
 });
 
+router.get('/pr', async (req: Request, res: Response) => {
+  await ddcModel.getPr().then((rs: any) => {
+    var xmlParser = require('xml2json');
+    var json = xmlParser.toJson(rs);
+    const data = JSON.parse(json).rss.channel.item;
+    // console.log("to json -> %s", JSON.parse(json));
+    console.log(data);
+
+
+
+    res.send({ ok: true, code: HttpStatus.OK, rows: data });
+  }).catch(error => {
+    console.log(error);
+    res.send({ ok: false, error: error, code: HttpStatus.INTERNAL_SERVER_ERROR });
+
+
+  })
+});
+
 router.get('/timeline', (req: Request, res: Response) => {
   request('https://covid19.th-stat.com/', (err, response, body) => {
     if (!err && response.statusCode === 200) {
