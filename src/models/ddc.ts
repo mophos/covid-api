@@ -2,7 +2,7 @@ import * as Knex from 'knex';
 const request = require('request');
 export class DdcModel {
 
-  summaryTh() {
+  summaryDdcTh() {
     return new Promise((resolve, reject) => {
       var options = {
         'method': 'GET',
@@ -18,6 +18,13 @@ export class DdcModel {
         }
       });
     });
+  }
+
+
+  summaryTh(db: Knex) {
+    return db('covid_stat')
+      .orderBy('id', 'DESC')
+      .limit(1);
   }
 
   summaryGlobal() {
