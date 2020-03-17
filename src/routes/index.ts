@@ -17,10 +17,17 @@ router.get('/pr', async (req: Request, res: Response) => {
   await ddcModel.getPr().then((rs: any) => {
     var xmlParser = require('xml2json');
     var json = xmlParser.toJson(rs);
+    json = json.replace(/&nbsp;/g, " ")
+    json = json.replace(/&ldquo;/g, " ")
+    json = json.replace(/&rdquo;/g, " ")
     const data = JSON.parse(json).rss.channel.item;
-    // console.log("to json -> %s", JSON.parse(json));
-    console.log(data);
 
+    // const result = [];
+    // for (const d of data) {
+    //   if (Object.keys(d.description).length > 0) {
+    //     result.push(d);
+    //   }
+    // }
 
 
     res.send({ ok: true, code: HttpStatus.OK, rows: data });
@@ -30,6 +37,17 @@ router.get('/pr', async (req: Request, res: Response) => {
 
 
   })
+});
+
+router.get('/info', async (req: Request, res: Response) => {
+
+  const info: any = [
+    { url: 'https://www3.dmsc.moph.go.th/images/map_sars_cov_2.jpg' },
+    { url: 'https://ddc.moph.go.th/viralpneumonia/img/infographic/info17.jpg' },
+    { url: 'https://ddc.moph.go.th/viralpneumonia/img/infographic/info16.jpg' },
+    { url: 'https://ddc.moph.go.th/viralpneumonia/img/infographic/info14.jpg' }];
+
+  res.send({ ok: true, code: HttpStatus.OK, rows: info });
 });
 
 router.get('/timeline', (req: Request, res: Response) => {
