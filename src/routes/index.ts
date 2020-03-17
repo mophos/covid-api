@@ -56,9 +56,9 @@ router.get('/timeline', (req: Request, res: Response) => {
 
 });
 
-router.get('/summary/th', async (req: Request, res: Response) => {
+router.get('/summary-ddc/th', async (req: Request, res: Response) => {
   try {
-    await ddcModel.summaryTh().then((rs: any) => {
+    await ddcModel.summaryDdcTh().then((rs: any) => {
       const data = rs.features[0].attributes;
       const obj = {
         confirmed: data.Confirmed,
@@ -82,6 +82,25 @@ router.get('/summary/th', async (req: Request, res: Response) => {
 
 
     })
+  } catch (error) {
+    console.log(error);
+
+    res.send({ ok: false, error: error.message, code: HttpStatus.INTERNAL_SERVER_ERROR });
+  }
+
+});
+
+router.get('/summary/th', async (req: Request, res: Response) => {
+  try {
+    const rs: any = await ddcModel.summaryTh(req.db);
+    res.send({
+      ok: true,
+      code: HttpStatus.OK,
+      rows: rs[0]
+    });
+
+
+
   } catch (error) {
     console.log(error);
 
