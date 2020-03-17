@@ -49,7 +49,7 @@ export class DdcModel {
     return new Promise((resolve, reject) => {
       var options = {
         'method': 'GET',
-        'url': 'https://pr.moph.go.th/rss_prmoph.php?id=1',
+        'url': 'https://pr.moph.go.th/rss_prmoph.php?id=2',
         'headers': {
         }
       };
