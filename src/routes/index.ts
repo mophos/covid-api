@@ -87,8 +87,8 @@ router.get('/add-visit', async (req: Request, res: Response) => {
 
 router.get('/visit', async (req: Request, res: Response) => {
   try {
-    await serviceModel.getCount(req.db);
-    res.send({ ok: true });
+    let rs: any = await serviceModel.getCount(req.db);
+    res.send({ ok: true, rows: rs[0] });
   } catch (error) {
     res.send({ ok: false })
   }
