@@ -2,13 +2,15 @@ import * as express from 'express';
 import { Router, Request, Response } from 'express';
 import { Jwt } from '../models/jwt';
 import { DdcModel } from '../models/ddc';
-var request = require('request');
+import { ServiceModel } from '../models/service';
 import * as HttpStatus from 'http-status-codes';
 
 const jwt = new Jwt();
 
+var request = require('request');
 const router: Router = Router();
 const ddcModel = new DdcModel();
+const serviceModel = new ServiceModel();
 router.get('/', (req: Request, res: Response) => {
   res.send({ ok: true, message: 'Welcome to RESTful api server!', code: HttpStatus.OK });
 });
@@ -72,6 +74,24 @@ router.get('/timeline', (req: Request, res: Response) => {
     }
   });
 
+});
+
+router.get('/add-visit', async (req: Request, res: Response) => {
+  try {
+    await serviceModel.incrementCount(req.db);
+    res.send({ ok: true });
+  } catch (error) {
+    res.send({ ok: false })
+  }
+});
+
+router.get('/visit', async (req: Request, res: Response) => {
+  try {
+    await serviceModel.getCount(req.db);
+    res.send({ ok: true });
+  } catch (error) {
+    res.send({ ok: false })
+  }
 });
 
 router.get('/summary-ddc/th', async (req: Request, res: Response) => {
