@@ -11,6 +11,7 @@ var request = require('request');
 const router: Router = Router();
 const ddcModel = new DdcModel();
 const serviceModel = new ServiceModel();
+
 router.get('/', (req: Request, res: Response) => {
   res.send({ ok: true, message: 'Welcome to RESTful api server!', code: HttpStatus.OK });
 });
@@ -43,21 +44,24 @@ router.get('/', (req: Request, res: Response) => {
 
 router.get('/pr', async (req: Request, res: Response) => {
   try {
-    const rs: any = await serviceModel.getPr();
-    if(rs.ok){
-      res.send({
-        ok: true,
-        code: HttpStatus.OK,
-        rows: rs.rows
-      });
-    } else {
-      res.send({ ok: false, error: rs.error, code: HttpStatus.INTERNAL_SERVER_ERROR });
-    }
+    await serviceModel.getPr().then((rs: any) => {
+      if (rs.ok) {
+        res.send({
+          ok: true,
+          code: HttpStatus.OK,
+          rows: rs.rows
+        });
+      } else {
+        res.send({ ok: false, error: rs.error, code: HttpStatus.INTERNAL_SERVER_ERROR });
+      }
+    }).catch(error => {
+      console.log(error);
+    })
+
   } catch (error) {
     console.log(error);
     res.send({ ok: false, error: error.message, code: HttpStatus.INTERNAL_SERVER_ERROR });
   }
-
 });
 
 router.get('/info', async (req: Request, res: Response) => {
