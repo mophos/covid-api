@@ -45,23 +45,23 @@ export class DdcModel {
     });
   }
 
-  getPr() {
-    return new Promise((resolve, reject) => {
-      var options = {
-        'method': 'GET',
-        'url': 'https://pr.moph.go.th/rss_prmoph.php?id=1',
-        'headers': {
-        }
-      };
-      request(options, function (error, response) {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(response.body);
-        }
-      });
-    });
-  }
+  // getPr() {
+  //   return new Promise((resolve, reject) => {
+  //     var options = {
+  //       'method': 'GET',
+  //       'url': 'https://pr.moph.go.th/rss_prmoph.php?id=1',
+  //       'headers': {
+  //       }
+  //     };
+  //     request(options, function (error, response) {
+  //       if (error) {
+  //         reject(error);
+  //       } else {
+  //         resolve(response.body);
+  //       }
+  //     });
+  //   });
+  // }
 
 
 }

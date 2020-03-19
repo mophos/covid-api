@@ -15,30 +15,49 @@ router.get('/', (req: Request, res: Response) => {
   res.send({ ok: true, message: 'Welcome to RESTful api server!', code: HttpStatus.OK });
 });
 
+// router.get('/pr', async (req: Request, res: Response) => {
+//   await ddcModel.getPr().then((rs: any) => {
+//     var xmlParser = require('xml2json');
+//     var json = xmlParser.toJson(rs);
+//     json = json.replace(/&nbsp;/g, " ")
+//     json = json.replace(/&ldquo;/g, " ")
+//     json = json.replace(/&rdquo;/g, " ")
+//     const data = JSON.parse(json).rss.channel.item;
+
+//     // const result = [];
+//     // for (const d of data) {
+//     //   if (Object.keys(d.description).length > 0) {
+//     //     result.push(d);
+//     //   }
+//     // }
+
+
+//     res.send({ ok: true, code: HttpStatus.OK, rows: data });
+//   }).catch(error => {
+//     console.log(error);
+//     res.send({ ok: false, error: error, code: HttpStatus.INTERNAL_SERVER_ERROR });
+
+
+//   })
+// });
+
 router.get('/pr', async (req: Request, res: Response) => {
-  await ddcModel.getPr().then((rs: any) => {
-    var xmlParser = require('xml2json');
-    var json = xmlParser.toJson(rs);
-    json = json.replace(/&nbsp;/g, " ")
-    json = json.replace(/&ldquo;/g, " ")
-    json = json.replace(/&rdquo;/g, " ")
-    const data = JSON.parse(json).rss.channel.item;
-
-    // const result = [];
-    // for (const d of data) {
-    //   if (Object.keys(d.description).length > 0) {
-    //     result.push(d);
-    //   }
-    // }
-
-
-    res.send({ ok: true, code: HttpStatus.OK, rows: data });
-  }).catch(error => {
+  try {
+    const rs: any = await serviceModel.getPr();
+    if(rs.ok){
+      res.send({
+        ok: true,
+        code: HttpStatus.OK,
+        rows: rs.rows
+      });
+    } else {
+      res.send({ ok: false, error: rs.error, code: HttpStatus.INTERNAL_SERVER_ERROR });
+    }
+  } catch (error) {
     console.log(error);
-    res.send({ ok: false, error: error, code: HttpStatus.INTERNAL_SERVER_ERROR });
+    res.send({ ok: false, error: error.message, code: HttpStatus.INTERNAL_SERVER_ERROR });
+  }
 
-
-  })
 });
 
 router.get('/info', async (req: Request, res: Response) => {
