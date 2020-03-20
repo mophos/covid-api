@@ -99,8 +99,10 @@ router.get('/timeline', (req: Request, res: Response) => {
 
 });
 
-router.get('/add-visit', async (req: Request, res: Response) => {
+router.post('/add-visit', async (req: Request, res: Response) => {
   try {
+    const device = req.body.device;
+    await serviceModel.saveLog(req.db,device);
     await serviceModel.incrementCount(req.db);
     res.send({ ok: true });
   } catch (error) {
