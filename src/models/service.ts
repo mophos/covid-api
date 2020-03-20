@@ -28,6 +28,22 @@ export class ServiceModel {
     });
   }
 
+  getInfographic() {
+    return new Promise((resolve, reject) => {
+      var options = {
+        'method': 'GET',
+        'url': 'http://covid19.moph.go.th/pr/infographic'
+      };
+      request(options, function (error, response) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(JSON.parse(response.body));
+        }
+      });
+    });
+  }
+
 
   getNews(db: Knex) {
     return db('news')
