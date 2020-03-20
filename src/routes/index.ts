@@ -218,4 +218,35 @@ router.get('/summary/global', async (req: Request, res: Response) => {
 
 });
 
+
+router.get('/news', async (req: Request, res: Response) => {
+  try {
+    const rs: any = await serviceModel.getNews(req.db);
+    res.send({ ok: true, rows: rs });
+  } catch (error) {
+    res.send({ ok: false, error: error });
+  }
+});
+
+router.get('/infographic', async (req: Request, res: Response) => {
+  try {
+    await serviceModel.getInfographic().then((rs: any) => {
+      if (rs.ok) {
+        res.send({
+          ok: true,
+          code: HttpStatus.OK,
+          rows: rs.rows
+        });
+      } else {
+        res.send({ ok: false, error: rs.error, code: HttpStatus.INTERNAL_SERVER_ERROR });
+      }
+    }).catch(error => {
+      console.log(error);
+    })
+
+  } catch (error) {
+    console.log(error);
+    res.send({ ok: false, error: error.message, code: HttpStatus.INTERNAL_SERVER_ERROR });
+  }
+});
 export default router;
