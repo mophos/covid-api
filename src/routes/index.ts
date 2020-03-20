@@ -218,4 +218,14 @@ router.get('/summary/global', async (req: Request, res: Response) => {
 
 });
 
+
+router.get('/news', async (req: Request, res: Response) => {
+  try {
+    const rs: any = await serviceModel.getNews(req.db);
+    res.send({ ok: true, rows: rs });
+  } catch (error) {
+    res.send({ ok: false, error: error });
+  }
+});
+
 export default router;

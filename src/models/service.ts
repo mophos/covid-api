@@ -27,4 +27,10 @@ export class ServiceModel {
       });
     });
   }
+
+
+  getNews(db: Knex) {
+    return db('news')
+      .orderBy('id', 'DESC')
+  }
 }
