@@ -8,6 +8,11 @@ export class ServiceModel {
       .increment('count', 1);
   }
 
+  saveLog(db: Knex, device) {
+    return db('web_visit_log')
+      .insert(device);
+  }
+
   getCount(db: Knex) {
     return db('web_visit');
   }
