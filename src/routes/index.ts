@@ -276,11 +276,12 @@ router.get('/generate-image', async (req: Request, res: Response) => {
 
     nodeHtmlToImage({
       output: './public/share.png',
-      html: html
+      html: html,
+      puppeteerArgs: ['--no-sandbox', '--disable-setuid-sandbox']
     })
-      .then(() => console.log('The image was created successfully!'))
+      .then(() => res.send({ ok: true, rows: 'https://covid.moph.go.th/share.png' }))
 
-    res.send({ ok: true, rows: 'https://covid.moph.go.th/share.png' });
+
   } catch (error) {
     console.log(error);
     res.send({ ok: false, error: error.message, code: HttpStatus.INTERNAL_SERVER_ERROR });
