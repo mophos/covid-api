@@ -5,8 +5,13 @@ import { DdcModel } from '../models/ddc';
 import { ServiceModel } from '../models/service';
 import * as HttpStatus from 'http-status-codes';
 
-const jwt = new Jwt();
+const nodeHtmlToImage = require('node-html-to-image')
+import * as ejs from 'ejs';
 
+import * as fs from 'fs';
+const jwt = new Jwt();
+import * as path from 'path';
+import * as moment from 'moment';
 var request = require('request');
 const router: Router = Router();
 const ddcModel = new DdcModel();
@@ -102,7 +107,7 @@ router.get('/timeline', (req: Request, res: Response) => {
 router.post('/add-visit', async (req: Request, res: Response) => {
   try {
     const device = req.body.device;
-    await serviceModel.saveLog(req.db,device);
+    await serviceModel.saveLog(req.db, device);
     await serviceModel.incrementCount(req.db);
     res.send({ ok: true });
   } catch (error) {
@@ -246,6 +251,36 @@ router.get('/infographic', async (req: Request, res: Response) => {
       console.log(error);
     })
 
+  } catch (error) {
+    console.log(error);
+    res.send({ ok: false, error: error.message, code: HttpStatus.INTERNAL_SERVER_ERROR });
+  }
+});
+
+router.get('/generate-image', async (req: Request, res: Response) => {
+  try {
+    const _ejsPath = path.join(__dirname, '../../templates/share.ejs');
+    const contents = fs.readFileSync(_ejsPath, 'utf8');
+    let data: any = {};
+    const rs: any = await ddcModel.summaryTh(req.db);
+
+    data.date = `${moment().locale('th').format('D MMMM')} พ.ศ.​ ${moment().get('year') + 543}`;
+    data.total = rs[0].confirm_total;
+    data.confirm = rs[0].confirm_new;
+    data.dead = rs[0].confirm_dead;
+    data.critical = rs[0].confirm_critical;
+    data.recovery = rs[0].confirm_recover;
+
+    // create HTML file
+    let html = ejs.render(contents, data);
+
+    nodeHtmlToImage({
+      output: './public/share.png',
+      html: html
+    })
+      .then(() => console.log('The image was created successfully!'))
+
+    res.send({ ok: true, rows: 'https://covid.moph.go.th/share.png' });
   } catch (error) {
     console.log(error);
     res.send({ ok: false, error: error.message, code: HttpStatus.INTERNAL_SERVER_ERROR });
