@@ -1,0 +1,104 @@
+import * as Knex from 'knex';
+
+export class EocdmsModel {
+
+  getBed(db: Knex) {
+    return db('hospital_beds')
+  }
+
+  getBedOps(db: Knex) {
+    return db('hospital_beds')
+  }
+  getBedOpsProvince(db: Knex) {
+    return db('hospital_maps')
+      .select(
+        'zone_code',
+        'province_code',
+        'province_name',
+        db.raw(`sum(aiir_total+isolate_total+cohort_total+icu_bed_total) as total`)
+      )
+      .sum('aiir_total as aiir_total')
+      .sum('isolate_total as isolate_total')
+      .sum('cohort_total as cohort_total')
+      .sum('icu_bed_total as icu_bed_total')
+      .count('* as count')
+      .groupBy('province_code')
+      .groupBy('zone_code')
+      .where('ministry_code', '21000')
+      .where('sub_ministry_code', '21002')
+  }
+
+  getBedOutOpsProvince(db: Knex) {
+    return db('hospital_maps')
+      .select(
+        'zone_code',
+        'province_code',
+        'province_name',
+        db.raw(`sum(aiir_total+isolate_total+cohort_total+icu_bed_total) as total`)
+      )
+      .sum('aiir_total as aiir_total')
+      .sum('isolate_total as isolate_total')
+      .sum('cohort_total as cohort_total')
+      .sum('icu_bed_total as icu_bed_total')
+      .count('* as count')
+      .groupBy('province_code')
+      .groupBy('zone_code')
+      .whereNot((w) => {
+        w.where('ministry_code', '21000')
+          .where('sub_ministry_code', '21002')
+      })
+  }
+
+  getBedSumary(db: Knex) {
+    return db('hospital_maps')
+      .select(
+        db.raw(`if(sub_ministry_code is null,ministry_name,sub_ministry_name) as name`),
+        'ministry_name',
+        'sub_ministry_name',
+        db.raw(`sum(aiir_total+isolate_total+cohort_total+icu_bed_total) as total`)
+      )
+      .sum('aiir_total as aiir_total')
+      .sum('isolate_total as isolate_total')
+      .sum('cohort_total as cohort_total')
+      .sum('icu_bed_total as icu_bed_total')
+      .count('* as count')
+      .groupBy('ministry_code')
+      .groupBy('sub_ministry_code')
+
+  }
+
+  getSupplieOpsProvince(db: Knex) {
+    return db('hospital_maps')
+      .select(
+        'zone_code',
+        'province_code',
+        'province_name'
+      )
+      .sum('mask_n95 as mask_n95')
+      .sum('sugical_mask as sugical_mask')
+      .sum('water_resistance_gown as water_resistance_gown')
+      .sum('med_flavipiravir_tab as med_flavipiravir_tab')
+      .sum('cover_all as cover_all')
+      
+      .sum('mask_n95_used_month as mask_n95_used_month')
+      .sum('sugical_mask_used_month as sugical_mask_used_month')
+      .sum('water_resistance_gown_used_month as water_resistance_gown_used_month')
+      .sum('med_flavipiravir_tab_used_month as med_flavipiravir_tab_used_month')
+      .sum('cover_all_used_month as cover_all_used_month')
+      .count('* as count')
+      .groupBy('province_code')
+      .groupBy('zone_code')
+      .where('ministry_code', '21000')
+      .where('sub_ministry_code', '21002')
+  }
+
+  getDoctor(db: Knex) {
+    return db('hrops')
+      .select('department', 'experttype')
+      .sum('numberofperson as numberofperson')
+      .groupBy('department')
+      .groupBy('experttype')
+      .orderBy('department')
+      .orderBy('experttype','DESC')
+  }
+}
