@@ -167,4 +167,15 @@ router.get('/doctor', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/doctor-group-type', async (req: Request, res: Response) => {
+  try {
+    const rs: any = await eocdmsModel.getDoctorGroupType(req.dbEocDms);
+    res.send({ ok: true, rows: rs, code: HttpStatus.OK });
+  } catch (error) {
+    console.log(error);
+
+    res.send({ ok: false, error: error, code: HttpStatus.INTERNAL_SERVER_ERROR });
+  }
+});
+
 export default router;
