@@ -94,11 +94,21 @@ export class EocdmsModel {
 
   getDoctor(db: Knex) {
     return db('hrops')
-      .select('department', 'experttype')
+      .select('department', db.raw(`if(experttype = "(ว่าง)",nurseexpert,experttype) as experttype`))
       .sum('numberofperson as numberofperson')
       .groupBy('department')
       .groupBy('experttype')
-      .orderBy('department')
+      .groupBy('nurseexpert')
+      .orderBy('experttype')
+      .orderBy('nurseexpert')
+  }
+  
+  getDoctorGroupType(db: Knex) {
+    return db('hrops')
+      .select( db.raw(`if(experttype = "(ว่าง)",nurseexpert,experttype) as experttype`))
+      .sum('numberofperson as numberofperson')
+      .groupBy('experttype')
+      .groupBy('nurseexpert')
       .orderBy('experttype','DESC')
   }
 }
