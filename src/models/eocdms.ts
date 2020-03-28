@@ -85,7 +85,7 @@ export class EocdmsModel {
       .sum('water_resistance_gown as water_resistance_gown')
       .sum('med_flavipiravir_tab as med_flavipiravir_tab')
       .sum('cover_all as cover_all')
-      
+
       .sum('mask_n95_used_month as mask_n95_used_month')
       .sum('sugical_mask_used_month as sugical_mask_used_month')
       .sum('water_resistance_gown_used_month as water_resistance_gown_used_month')
@@ -108,13 +108,14 @@ export class EocdmsModel {
       .orderBy('experttype')
       .orderBy('nurseexpert')
   }
-  
+
   getDoctorGroupType(db: Knex) {
     return db('hrops')
-      .select( db.raw(`if(experttype = "(ว่าง)",nurseexpert,experttype) as experttype`))
+      .select(db.raw(`if(experttype = "(ว่าง)",nurseexpert,experttype) as experttype`))
       .sum('numberofperson as numberofperson')
       .groupBy('experttype')
       .groupBy('nurseexpert')
-      .orderBy('experttype','DESC')
+      .orderBy('experttype', 'DESC')
   }
+
 }

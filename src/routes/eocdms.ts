@@ -210,4 +210,5 @@ router.get('/doctor-group-type', async (req: Request, res: Response) => {
   }
 });
 
+
 export default router;
