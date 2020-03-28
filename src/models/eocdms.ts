@@ -55,12 +55,18 @@ export class EocdmsModel {
         db.raw(`if(sub_ministry_code is null,ministry_name,sub_ministry_name) as name`),
         'ministry_name',
         'sub_ministry_name',
-        db.raw(`sum(aiir_total+isolate_total+cohort_total+icu_bed_total) as total`)
+        db.raw(`sum(aiir_total+isolate_total+cohort_total+icu_bed_total) as total`),
+        db.raw(`sum(aiir_total+isolate_total+cohort_total+icu_bed_total) as total_available`)
       )
       .sum('aiir_total as aiir_total')
       .sum('isolate_total as isolate_total')
       .sum('cohort_total as cohort_total')
       .sum('icu_bed_total as icu_bed_total')
+
+      .sum('aiir_available as aiir_available')
+      .sum('isolate_available as isolate_available')
+      .sum('cohort_available as cohort_available')
+      .sum('icu_bed_available as icu_bed_available')
       .count('* as count')
       .groupBy('ministry_code')
       .groupBy('sub_ministry_code')
