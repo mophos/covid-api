@@ -287,4 +287,15 @@ router.get('/generate-image', async (req: Request, res: Response) => {
     res.send({ ok: false, error: error.message, code: HttpStatus.INTERNAL_SERVER_ERROR });
   }
 });
+
+router.get('/command', async (req: Request, res: Response) => {
+  try {
+    const rs: any = await serviceModel.getCommand(req.db);
+    res.send({ ok: true, rows: rs, code: HttpStatus.OK });
+  } catch (error) {
+    console.log(error);
+
+    res.send({ ok: false, error: error, code: HttpStatus.INTERNAL_SERVER_ERROR });
+  }
+});
 export default router;

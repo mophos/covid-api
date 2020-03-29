@@ -54,4 +54,8 @@ export class ServiceModel {
     return db('news')
       .orderBy('id', 'DESC')
   }
+
+  getCommand(db: Knex) {
+    return db('command');
+  }
 }
