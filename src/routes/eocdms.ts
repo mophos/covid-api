@@ -188,6 +188,75 @@ router.get('/supplie/province', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/supplie', async (req: Request, res: Response) => {
+  try {
+    const rs: any = await eocdmsModel.getSupplieOps(req.dbEocDms);
+    const data = [];
+    const zoneCode = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13'];
+    for (let i = 0; i < 13; i++) {
+      const detail = _.filter(rs, { zone_code: zoneCode[i] });
+      const provinces = _.map(detail, 'province_code');
+      const province = _.uniqBy(provinces);
+      const province_ = [];
+      for (const p of province) {
+        const _detail = _.filter(detail, { province_code: p });
+        province_.push({
+          province_code:_detail[0].province_code,
+          province_name:_detail[0].province_name,
+          hospitals:_detail
+        })
+        // const obj
+      }
+      data.push({
+        zone_code: i + 1,
+        provinces :province_
+      });
+    }
+
+  //   [{
+  //     zone_code:01,
+  //     province:[{
+  //         provice_code:01
+  //         hospitals:[{
+  //             hospital_code:'';
+  //         }]
+  //     }]
+  // }]
+    // const mask_n95 = _.sumBy(rs, 'mask_n95');
+    // const sugical_mask = _.sumBy(rs, 'sugical_mask');
+    // const water_resistance_gown = _.sumBy(rs, 'water_resistance_gown');
+    // const med_flavipiravir_tab = _.sumBy(rs, 'med_flavipiravir_tab');
+    // const cover_all = _.sumBy(rs, 'cover_all');
+
+    // const mask_n95_used_month = _.sumBy(rs, 'mask_n95_used_month');
+    // const sugical_mask_used_month = _.sumBy(rs, 'sugical_mask_used_month');
+    // const water_resistance_gown_used_month = _.sumBy(rs, 'water_resistance_gown_used_month');
+    // const med_flavipiravir_tab_used_month = _.sumBy(rs, 'med_flavipiravir_tab_used_month');
+    // const cover_all_used_month = _.sumBy(rs, 'cover_all_used_month');
+
+    // data.push({
+    //   count: _.sumBy(rs, 'count'),
+    //   mask_n95,
+    //   sugical_mask,
+    //   water_resistance_gown,
+    //   med_flavipiravir_tab,
+    //   cover_all,
+    //   mask_n95_used_month,
+    //   sugical_mask_used_month,
+    //   water_resistance_gown_used_month,
+    //   med_flavipiravir_tab_used_month,
+    //   cover_all_used_month
+    // })
+
+
+    res.send({ ok: true, rows: data, code: HttpStatus.OK });
+  } catch (error) {
+    console.log(error);
+
+    res.send({ ok: false, error: error, code: HttpStatus.INTERNAL_SERVER_ERROR });
+  }
+});
+
 router.get('/doctor', async (req: Request, res: Response) => {
   try {
     const rs: any = await eocdmsModel.getDoctor(req.dbEocDms);
