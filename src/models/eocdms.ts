@@ -98,6 +98,40 @@ export class EocdmsModel {
       .where('sub_ministry_code', '21002')
   }
 
+  getSupplieOps(db: Knex) {
+    return db('hospital_maps')
+      .select(
+        'zone_code',
+        'province_code',
+        'province_name',
+        'hospname',
+        'mask_n95',
+        'sugical_mask',
+        'water_resistance_gown',
+        'cover_all',
+        'med_flavipiravir_tab',
+        'mask_n95_used_month',
+        'sugical_mask_used_month',
+        'water_resistance_gown_used_month',
+        'med_flavipiravir_tab_used_month'
+        ,'cover_all_used_month'
+      )
+      // .sum('mask_n95 as mask_n95')
+      // .sum('sugical_mask as sugical_mask')
+      // .sum('water_resistance_gown as water_resistance_gown')
+      // .sum('med_flavipiravir_tab as med_flavipiravir_tab')
+      // .sum('cover_all as cover_all')
+
+      // .sum('mask_n95_used_month as mask_n95_used_month')
+      // .sum('sugical_mask_used_month as sugical_mask_used_month')
+      // .sum('water_resistance_gown_used_month as water_resistance_gown_used_month')
+      // .sum('med_flavipiravir_tab_used_month as med_flavipiravir_tab_used_month')
+      // .sum('cover_all_used_month as cover_all_used_month')
+      // .count('* as count')
+      .where('ministry_code', '21000')
+      .where('sub_ministry_code', '21002')
+  }
+
   getDoctor(db: Knex) {
     return db('hrops')
       .select('department', db.raw(`if(experttype = "(ว่าง)",nurseexpert,experttype) as experttype`))
