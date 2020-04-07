@@ -300,31 +300,4 @@ router.get('/command', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/test', async (req: Request, res: Response) => {
-  try {
-    const rs: any = await eocdmsModel.getHos(req.dbEocDms);
-
-    for (const i of rs) {
-      console.log(i.short_hospital_code);
-      const rows: any = await ddcModel.getgis(i.short_hospital_code)
-      if (rows.features.length) {
-        if (rows.features[0].geometry.coordinates) {
-          const data = {
-            la: rows.features[0].geometry.coordinates[0],
-            lo: rows.features[0].geometry.coordinates[1]
-          }
-          const rs: any = await eocdmsModel.saveHos(req.dbEocDms, i.short_hospital_code, data);
-
-        }
-      }
-
-
-    }
-    res.send({ ok: true, code: HttpStatus.OK });
-  } catch (error) {
-    console.log(error);
-
-    res.send({ ok: false, error: error, code: HttpStatus.INTERNAL_SERVER_ERROR });
-  }
-});
 export default router;
