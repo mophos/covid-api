@@ -114,7 +114,7 @@ export class EocdmsModel {
         'sugical_mask_used_month',
         'water_resistance_gown_used_month',
         'med_flavipiravir_tab_used_month'
-        ,'cover_all_used_month'
+        , 'cover_all_used_month'
       )
       // .sum('mask_n95 as mask_n95')
       // .sum('sugical_mask as sugical_mask')
@@ -152,4 +152,17 @@ export class EocdmsModel {
       .orderBy('experttype', 'DESC')
   }
 
+  getHos(db: Knex) {
+    return db('hospital_new')
+    .whereIn('hosptype_code',['01','02'])
+    // .whereIn('hosptype_code',['05','06','07'])
+    // .offset(6000)
+      // .limit(2);
+  }
+
+  saveHos(db: Knex, hospcode, data) {
+    return db('hospital_new')
+      .update(data)
+      .where('short_hospital_code', hospcode)
+  }
 }

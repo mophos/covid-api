@@ -56,6 +56,7 @@ export class ServiceModel {
   }
 
   getCommand(db: Knex) {
-    return db('command');
+    return db('command')
+    .where('is_actived','Y')
   }
 }

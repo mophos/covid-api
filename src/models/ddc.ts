@@ -63,5 +63,23 @@ export class DdcModel {
   //   });
   // }
 
-
+  getgis(hospcode) {
+    return new Promise((resolve, reject) => {
+      var options = {
+        'method': 'GET',
+        'url': `https://opendata.service.moph.go.th/gis/v1/getgis/hoscode/${hospcode}`,
+        'headers': {
+          rejectUnauthorized: false
+        }
+      };
+      request(options, function (error, response) {
+        if (error) {
+          reject(error);
+        } else {
+    
+          resolve(JSON.parse(response.body));
+        }
+      });
+    });
+  }
 }

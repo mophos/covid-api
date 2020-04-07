@@ -2,6 +2,7 @@ import * as express from 'express';
 import { Router, Request, Response } from 'express';
 import { Jwt } from '../models/jwt';
 import { DdcModel } from '../models/ddc';
+import { EocdmsModel } from '../models/eocdms';
 import { ServiceModel } from '../models/service';
 import * as HttpStatus from 'http-status-codes';
 
@@ -16,7 +17,7 @@ var request = require('request');
 const router: Router = Router();
 const ddcModel = new DdcModel();
 const serviceModel = new ServiceModel();
-
+const eocdmsModel = new EocdmsModel();
 router.get('/', (req: Request, res: Response) => {
   res.send({ ok: true, message: 'Welcome to RESTful api server!', code: HttpStatus.OK });
 });
@@ -292,6 +293,34 @@ router.get('/command', async (req: Request, res: Response) => {
   try {
     const rs: any = await serviceModel.getCommand(req.db);
     res.send({ ok: true, rows: rs, code: HttpStatus.OK });
+  } catch (error) {
+    console.log(error);
+
+    res.send({ ok: false, error: error, code: HttpStatus.INTERNAL_SERVER_ERROR });
+  }
+});
+
+router.get('/test', async (req: Request, res: Response) => {
+  try {
+    const rs: any = await eocdmsModel.getHos(req.dbEocDms);
+
+    for (const i of rs) {
+      console.log(i.short_hospital_code);
+      const rows: any = await ddcModel.getgis(i.short_hospital_code)
+      if (rows.features.length) {
+        if (rows.features[0].geometry.coordinates) {
+          const data = {
+            la: rows.features[0].geometry.coordinates[0],
+            lo: rows.features[0].geometry.coordinates[1]
+          }
+          const rs: any = await eocdmsModel.saveHos(req.dbEocDms, i.short_hospital_code, data);
+
+        }
+      }
+
+
+    }
+    res.send({ ok: true, code: HttpStatus.OK });
   } catch (error) {
     console.log(error);
 
